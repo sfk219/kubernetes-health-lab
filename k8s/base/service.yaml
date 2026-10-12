@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-health-lab
+spec:
+  selector: {app: kubernetes-health-lab}
+  ports:
+    - port: 80
+      targetPort: 8080
