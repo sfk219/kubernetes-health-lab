@@ -1,20 +1,22 @@
 # Kubernetes Health Lab
 
-A containerized HTTP service with Kubernetes deployment manifests, readiness/liveness health checks, metrics and Kustomize overlays.
+A runnable **cloud-native service** with health checks and Prometheus-format metrics. Includes Docker packaging and Kubernetes manifests for deployment, readiness/liveness probes, Service and Kustomize dev overlay.
 
-**Technologies:** Python, Docker, Kubernetes, Kustomize.
+## Run locally
+```bash
+python -m app.server
+curl http://localhost:8080/live
+curl http://localhost:8080/ready
+curl http://localhost:8080/metrics
+```
 
-## Portfolio context
-This repository is an independently authored educational demonstration aligned with technologies in my professional background and CV. It does not contain employer-owned code or real customer data.
+## Build and deploy to a local Kind cluster
+```bash
+kind create cluster --name portfolio
+docker build -t kubernetes-health-lab:local .
+kind load docker-image kubernetes-health-lab:local --name portfolio
+kubectl apply -k k8s/overlays/dev
+kubectl port-forward svc/kubernetes-health-lab 8080:80
+```
 
-## What it demonstrates
-A containerized HTTP service with Kubernetes deployment manifests, readiness/liveness health checks, metrics and Kustomize overlays.
-
-## Limitations
-Kubernetes configurations are instructional; no running cluster is claimed.
-
-## Source code
-The full working demonstration was prepared as part of my portfolio package; source files and tests will be added separately. This README alone does not constitute a working implementation.
-
-## About the author
-Samra Faisal Khan — MSc Software Engineering (NUST), based in Germany. [GitHub profile](https://github.com/sfk219) · [LinkedIn](https://www.linkedin.com/in/samra-faisal-khan-6a5232142/)
+**Tech:** Python, Docker, Kubernetes, Kustomize, HTTP probes and observability. This is a learning project; a live Kubernetes deployment has not been verified.
